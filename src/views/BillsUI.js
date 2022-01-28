@@ -1,8 +1,8 @@
-import VerticalLayout from "./VerticalLayout.js";
-import ErrorPage from "./ErrorPage.js";
-import LoadingPage from "./LoadingPage.js";
+import VerticalLayout from './VerticalLayout.js'
+import ErrorPage from './ErrorPage.js'
+import LoadingPage from './LoadingPage.js'
 
-import Actions from "./Actions.js";
+import Actions from './Actions.js'
 
 const row = (bill) => {
   return `
@@ -16,8 +16,8 @@ const row = (bill) => {
         ${Actions(bill.fileUrl)}
       </td>
     </tr>
-    `;
-};
+    `
+}
 
 const rows = (data) => {
   //In order to get bills in a descending order, we sort the bills by there date before rendering them through a map method
@@ -25,9 +25,9 @@ const rows = (data) => {
     ? data
         .sort((a, b) => (a.date < b.date ? 1 : -1))
         .map((bill) => row(bill))
-        .join("")
-    : "";
-};
+        .join('')
+    : ''
+}
 
 export default ({ data: bills, loading, error }) => {
   const modal = () => `
@@ -45,12 +45,12 @@ export default ({ data: bills, loading, error }) => {
         </div>
       </div>
     </div>
-  `;
+  `
 
   if (loading) {
-    return LoadingPage();
+    return LoadingPage()
   } else if (error) {
-    return ErrorPage(error);
+    return ErrorPage(error)
   }
 
   return `
@@ -80,5 +80,5 @@ export default ({ data: bills, loading, error }) => {
         </div>
       </div>
       ${modal()}
-    </div>`;
-};
+    </div>`
+}
