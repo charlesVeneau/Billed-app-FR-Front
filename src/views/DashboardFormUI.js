@@ -1,102 +1,79 @@
-import calendarIcon from '../assets/svg/calendar.js'
-import euroIcon from '../assets/svg/euro.js'
-import pctIcon from '../assets/svg/pct.js'
-import eyeWhite from '../assets/svg/eye_white.js'
+/**
+ * @jest-environment jsdom
+ */
+
+import { screen } from '@testing-library/dom'
+import DashboardFormUI from '../views/DashboardFormUI.js'
 import { formatDate } from '../app/format.js'
 
-export const modal = () => (`
-  <div class="modal fade" id="modaleFileAdmin1" data-testid="modaleFileAdmin" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLongTitle">Justificatif</h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
-        <div class="modal-body" data-toggle="modal">
-        </div>
-      </div>
-    </div>
-  </div>
-  `)
-
-export default (bill) => {
-
-  return (`
-    <div class="container dashboard-form" data-testid="dashboard-form">
-      <div class="row">
-        <div class="col-sm" id="dashboard-form-col1">
-          <label for="expense-type" class="bold-label">Type de dépense</label>
-          <div class='input-field'> ${bill.type} </div>
-          <label for="expense-name" class="bold-label">Nom de la dépense</label>
-          <div class='input-field'> ${bill.name} </div>
-          <label for="datepicker" class="bold-label">Date</label>
-          <div class='input-field input-flex'>
-            <span>${formatDate(bill.date)}</span>
-            <span> ${calendarIcon} </span>
-          </div>
-        </div>
-        <div class="col-sm" id="dashboard-form-col2">
-          <label for="commentary" class="bold-label">Commentaire</label>
-          <div class='textarea-field' style="height: 300px;"> ${bill.commentary} </div>
-        </div>
-      </div>
-      <div class="row">
-        <div class="col-sm">
-          <label for="amount" class="bold-label">Montant TTC </label>
-          <div class='input-field input-flex'>
-            <span data-testid="amount-d">${bill.amount}</span>
-            <span> ${euroIcon} </span>
-          </div>
-        </div>
-        <div class="col-sm">
-          <label for="vat" class="bold-label">TVA</label>
-          <div id='vat-flex-container'>
-            <div class='input-field input-flex vat-flex'>
-              <span>${bill.vat}</span>
-              <span> ${euroIcon} </span>
-            </div>
-            <div class='input-field input-flex vat-flex'>
-              <span>${bill.pct}</span>
-              <span> ${pctIcon} </span>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="row">
-        <div class="col-sm">
-          <label for="file" class="bold-label">Justificatif</label>
-            <div class='input-field input-flex file-flex'>
-            <span id="file-name-admin">${bill.fileName}</span>
-            <div class='icons-container'>
-              <span id="icon-eye-d" data-testid="icon-eye-d" data-bill-url="${bill.fileUrl}"> ${eyeWhite} </span>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="row">
-       ${bill.status === 'pending' ? (`
-        <div class="col-sm">
-          <label for="commentary-admin" class="bold-label">Ajouter un commentaire</label>
-          <textarea id="commentary2" class="form-control blue-border" data-testid="commentary2" rows="5"></textarea>
-        </div>
-       `) : (`
-        <div class="col-sm">
-          <label for="commentary-admin" class="bold-label">Votre commentaire</label>
-          <div class='input-field'> ${bill.commentAdmin} </div>
-        </div>
-       `)}
-      </div>
-      <div class="row">
-      ${bill.status === 'pending' ? (`
-      <div class="col-sm buttons-flex" style="width: 300px;" >
-        <button type="submit" id='btn-refuse-bill' data-testid='btn-refuse-bill-d' class="btn btn-primary">Refuser</button>
-        <button type="submit" id='btn-accept-bill' data-testid='btn-accept-bill-d' class="btn btn-primary">Accepter</button>
-      </div>
-      `) : ''}
-    </div>
-    ${modal()}
-    </div>
-  `)
+const bill = {
+  id: '47qAXb6fIm2zOKkLzMro',
+  vat: '80',
+  fileUrl:
+    'https://test.storage.tld/v0/b/billable-677b6.a…f-1.jpg?alt=media&token=c1640e12-a24b-4b11-ae52-529112e9602a',
+  status: 'accepted',
+  type: 'Hôtel et logement',
+  commentAdmin: 'ok',
+  commentary: 'séminaire billed',
+  name: 'encore',
+  fileName: 'preview-facture-free-201801-pdf-1.jpg',
+  date: '2004-04-04',
+  amount: 400,
+  email: 'a@a',
+  pct: 20,
 }
+
+const billAccepted = {
+  ...bill,
+  status: 'accepted',
+}
+
+const billPending = {
+  ...bill,
+  status: 'pending',
+}
+
+const billrefused = {
+  ...bill,
+  status: 'refused',
+}
+
+describe('Given I am connected as an Admin and I am on Dashboard Page', () => {
+  describe('When bill data is passed to DashboardUI', () => {
+    test('Then, it should them in the page', () => {
+      const html = DashboardFormUI(bill)
+      document.body.innerHTML = html
+      expect(screen.getByText(bill.vat)).toBeTruthy()
+      expect(screen.getByText(bill.type)).toBeTruthy()
+      expect(screen.getByText(bill.commentary)).toBeTruthy()
+      expect(screen.getByText(bill.name)).toBeTruthy()
+      expect(screen.getByText(bill.fileName)).toBeTruthy()
+      expect(screen.getByText(formatDate(bill.date))).toBeTruthy()
+      expect(screen.getByText(bill.amount.toString())).toBeTruthy()
+      expect(screen.getByText(bill.pct.toString())).toBeTruthy()
+    })
+  })
+  describe('When pending bill is passed to DashboardUI', () => {
+    test('Then, it should show button and textArea', () => {
+      const html = DashboardFormUI(billPending)
+      document.body.innerHTML = html
+      expect(screen.getByText('Accepter')).toBeTruthy()
+      expect(screen.getByText('Refuser')).toBeTruthy()
+      expect(screen.getByTestId('commentary2')).toBeTruthy()
+    })
+  })
+  describe('When accepted bill is passed to DashboardUI', () => {
+    test('Then, it should show admin commentary', () => {
+      const html = DashboardFormUI(billAccepted)
+      document.body.innerHTML = html
+      expect(screen.getByText(bill.commentAdmin)).toBeTruthy()
+    })
+  })
+  describe('When refused bill is passed to DashboardUI', () => {
+    test('Then, it should show admin commentary', () => {
+      const html = DashboardFormUI(billrefused)
+      document.body.innerHTML = html
+      expect(screen.getByText(bill.commentAdmin)).toBeTruthy()
+    })
+  })
+})
