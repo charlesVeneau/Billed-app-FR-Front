@@ -28,12 +28,7 @@ export default class NewBill {
     const email = JSON.parse(localStorage.getItem('user')).email
     formData.append('file', file)
     formData.append('email', email)
-    if (!fileExtension.match(/^(jpeg|jpg|png)$/)) {
-      alert(
-        `Merci d'envoyer uniquement des fichiers au format jpg, jpeg ou png.`
-      )
-      document.querySelector(`input[data-testid="file"]`).value = ''
-    } else {
+    if (fileExtension.match(/^(jpeg|jpg|png)$/)) {
       this.store
         .bills()
         .create({
@@ -49,6 +44,11 @@ export default class NewBill {
           this.fileName = fileName
         })
         .catch((error) => console.error(error))
+    } else {
+      alert(
+        `Merci d'envoyer uniquement des fichiers au format jpg, jpeg ou png.`
+      )
+      document.querySelector(`input[data-testid="file"]`).value = ''
     }
   }
   handleSubmit = (e) => {
