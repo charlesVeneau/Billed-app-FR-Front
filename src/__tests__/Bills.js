@@ -40,9 +40,7 @@ describe('Given I am connected as an employee and I am on Bills page', () => {
       const newBillButton = screen.getByTestId('btn-new-bill')
       newBillButton.addEventListener('click', handleClickNewBill())
       userEvent.click(newBillButton)
-      //expect the handleClickNewBill to be called
       expect(handleClickNewBill).toHaveBeenCalled()
-      //expect the route to be new bill
       expect(screen.getByText('Envoyer une note de frais')).toBeTruthy()
     })
   })
@@ -70,7 +68,7 @@ describe('Given I am connected as an employee and I am on Bills page', () => {
       const eye = screen.getAllByTestId('icon-eye')[0]
       eye.addEventListener('click', handleClickIconEye(eye))
       userEvent.click(eye)
-      const modale = screen.getAllByTestId('modaleFile')[0]
+      //const modale = screen.getAllByTestId('modaleFile')[0]
       expect(handleClickIconEye).toHaveBeenCalled()
     })
   })

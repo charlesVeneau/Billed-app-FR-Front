@@ -36,10 +36,7 @@ describe('Given I am connected as an employee', () => {
       })
       expect(screen.getByTestId('form-new-bill')).toBeTruthy()
     })
-    test('Then I can select upload a file', () => {
-      // Object.defineProperty(window, 'localStorage', {
-      //   value: localStorageMock,
-      // })
+    test('Then I can select upload an image file', () => {
       window.localStorage.setItem('user', JSON.stringify({ type: 'Employee' }))
       const onNavigate = (pathname) => {
         document.body.innerHTML = ROUTES({ pathname })
@@ -64,7 +61,7 @@ describe('Given I am connected as an employee', () => {
       expect(handleChangeFile).toHaveBeenCalled()
       expect(selectFile.files[0]).toStrictEqual(testFile)
     })
-    test("Then I can't select upload a file", () => {
+    test("Then I can't select upload a non image file", () => {
       window.localStorage.setItem('user', JSON.stringify({ type: 'Employee' }))
       const onNavigate = (pathname) => {
         document.body.innerHTML = ROUTES({ pathname })
@@ -85,7 +82,6 @@ describe('Given I am connected as an employee', () => {
 
       selectFile.addEventListener('change', handleChangeFile)
       fireEvent.change(selectFile, { target: { files: [testFile] } })
-      //userEvent.upload(selectFile, testFile)
 
       expect(handleChangeFile).toHaveBeenCalled()
       expect(window.alert).toHaveBeenCalled()
@@ -141,15 +137,6 @@ describe('Given I am a user connected as Employee', () => {
         store: null,
         localStorage: window.localStorage,
       })
-      // mockStore.bills.mockImplementationOnce(() => {
-      //   return {
-      //     create: () => {
-      //       return Promise.resolve()
-      //     },
-      //   }
-      // })
-      // await new Promise(process.nextTick)
-      // expect(screen.getByText('Mes notes de frais')).toBeTruthy()
       const validBill = {
         type: 'Equipement et matériel',
         name: 'Test',

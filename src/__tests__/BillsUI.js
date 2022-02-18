@@ -25,7 +25,6 @@ describe('Given I am connected as an employee', () => {
       })
       document.body.innerHTML = `<div id="root"></div>`
       await Router()
-      console.log(document.body.innerHTML)
       expect(
         screen.getByTestId('icon-window').classList.contains('active-icon')
       ).toBeTruthy()
