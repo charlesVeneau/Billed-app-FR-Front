@@ -123,7 +123,7 @@ describe('Given I am connected as an employee', () => {
 describe('Given I am a user connected as Employee', () => {
   jest.spyOn(mockStore, 'bills')
   describe('When I post a new bill', () => {
-    test('There should be a new bill', () => {
+    test('Then I should be send to the Bills page, () => {
       const html = NewBillUI()
       document.body.innerHTML = html
       Object.defineProperty(window, 'localStorage', { value: localStorageMock })
