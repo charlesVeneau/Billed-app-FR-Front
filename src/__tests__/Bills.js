@@ -56,8 +56,6 @@ describe('Given I am connected as an employee and I am on Bills page', () => {
         document.body.innerHTML = ROUTES({ pathname })
       }
       const store = null
-      //Bootsrap mock to call the modal method of the handleClickIconEye function
-      $.fn.modal = jest.fn()
       const billsView = new Bills({
         document,
         onNavigate,
@@ -68,7 +66,6 @@ describe('Given I am connected as an employee and I am on Bills page', () => {
       const eye = screen.getAllByTestId('icon-eye')[0]
       eye.addEventListener('click', handleClickIconEye(eye))
       userEvent.click(eye)
-      //const modale = screen.getAllByTestId('modaleFile')[0]
       expect(handleClickIconEye).toHaveBeenCalled()
     })
   })
